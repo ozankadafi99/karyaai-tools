@@ -1,106 +1,141 @@
 from pathlib import Path
 
-html = r'''<!doctype html>
+html = r'''<!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Tools produktivitas gratis: penghitung kata, pengolah teks, kalkulator diskon, timer fokus Pomodoro, dan kalkulator tanggal.">
-<meta name="theme-color" content="#0b2a54">
-<title>ProduktifTools — Tools Produktivitas Gratis</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="AI Kalkulator UMKM gratis untuk menghitung harga jual, keuntungan, margin, dan titik impas usaha kecil.">
+<meta name="theme-color" content="#123b2a">
+<title>UMKM Pintar — Kalkulator Usaha Gratis</title>
 <style>
-:root{--navy:#0b2a54;--yellow:#ffd530;--pale:#e7f0fa;--ink:#17243b;--muted:#68758a;--line:#dce4ef;--white:#fff;--bg:#f6f8fc}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55}
-header{background:var(--navy);color:white;padding:18px 20px;border-bottom:5px solid var(--yellow)}.nav{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}.brand{font-weight:850;font-size:1.25rem;letter-spacing:-.4px}.brand span{color:var(--yellow)}nav{display:flex;gap:16px;flex-wrap:wrap}nav a{color:white;text-decoration:none;font-size:.92rem}nav a:hover{text-decoration:underline}
-.hero{background:linear-gradient(135deg,var(--navy),#164a83);color:white;padding:54px 20px 48px}.hero-inner{max-width:1100px;margin:auto}.eyebrow{display:inline-block;color:var(--navy);background:var(--yellow);font-weight:800;border-radius:999px;padding:5px 12px;font-size:.8rem}.hero h1{font-size:clamp(2rem,5vw,3.35rem);line-height:1.1;max-width:760px;margin:18px 0 14px;letter-spacing:-1.3px}.hero p{color:#e5edf8;max-width:650px;margin:0 0 24px}.search{width:min(100%,540px);display:flex;gap:8px}.search input{flex:1;min-width:0;padding:13px 15px;border-radius:12px;border:1px solid #dce4ef;font:inherit}.search button{border:0;border-radius:12px;background:var(--yellow);color:var(--navy);font-weight:800;padding:0 18px;cursor:pointer}
-main{max-width:1100px;margin:0 auto;padding:32px 20px 54px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}.section-head h2{margin:0;font-size:1.55rem}.section-head p{margin:4px 0 0;color:var(--muted);font-size:.93rem}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.tool{background:white;border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 4px 18px #0b2a5408;scroll-margin-top:20px}.tool-top{display:flex;gap:12px;align-items:center;margin-bottom:15px}.tool-icon{width:44px;height:44px;display:grid;place-items:center;background:var(--pale);border-radius:12px;font-size:1.35rem}.tool h3{margin:0;font-size:1.12rem}.tool .desc{margin:3px 0 0;color:var(--muted);font-size:.88rem}.field{display:block;margin:12px 0 6px;font-size:.9rem;font-weight:700}textarea,input[type=text],input[type=number],input[type=date],select{width:100%;padding:11px 12px;border:1px solid #cbd6e5;border-radius:10px;background:white;color:var(--ink);font:inherit}textarea{min-height:125px;resize:vertical}.row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.btn{border:0;border-radius:10px;padding:10px 14px;background:var(--navy);color:white;font:inherit;font-weight:750;cursor:pointer}.btn:hover{filter:brightness(1.15)}.btn.secondary{background:var(--pale);color:var(--navy)}.btn.yellow{background:var(--yellow);color:var(--navy)}.stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.stat{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:7px 10px;font-size:.85rem}.result{margin-top:12px;padding:12px;background:#f0f6ff;border:1px solid #d7e6fb;border-radius:10px;min-height:42px;overflow-wrap:anywhere}.timer{text-align:center;padding:10px 0}.time{font-size:clamp(2.7rem,8vw,4rem);font-weight:850;letter-spacing:2px;color:var(--navy);font-variant-numeric:tabular-nums}.small{font-size:.85rem;color:var(--muted)}.notice{margin-top:24px;background:#fff8d8;border:1px solid #f3df81;padding:15px 17px;border-radius:12px;font-size:.9rem}.content{margin-top:38px;background:white;border:1px solid var(--line);border-radius:16px;padding:22px}.content h2{font-size:1.3rem}.content p{color:#4f5d72}footer{background:#071f40;color:#d8e4f4;padding:26px 20px;text-align:center;font-size:.9rem}footer a{color:var(--yellow)}.hidden{display:none!important}
-@media(max-width:680px){.grid{grid-template-columns:1fr}.hero{padding:40px 18px}.search{flex-direction:column}.search button{padding:12px}.row{grid-template-columns:1fr}nav{gap:10px}.tool{padding:18px}main{padding:25px 14px 40px}}
+:root{--green:#123b2a;--green2:#1d6748;--lime:#d7f36b;--paper:#f6f8f3;--ink:#17231c;--muted:#657168;--line:#dfe6dd;--white:#fff;--orange:#fff0d9}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}
+header{background:var(--green);color:white;padding:26px 20px 54px}.wrap{max-width:1100px;margin:auto}.top{display:flex;align-items:center;justify-content:space-between;gap:14px}.brand{font-weight:850;letter-spacing:-.5px;font-size:20px}.tag{font-size:12px;border:1px solid #ffffff55;border-radius:999px;padding:6px 10px;color:#eaf4e9}.hero{max-width:720px;padding-top:42px}.eyebrow{color:var(--lime);font-size:12px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase}.hero h1{font-size:clamp(32px,5vw,52px);line-height:1.08;letter-spacing:-1.8px;margin:12px 0}.hero p{color:#d6e3d8;max-width:620px;margin:0;font-size:16px}.hero strong{color:var(--lime)}
+main{max-width:1100px;margin:-28px auto 0;padding:0 20px 44px}.tabs{display:flex;gap:8px;overflow:auto;background:white;border:1px solid var(--line);border-radius:16px;padding:8px;box-shadow:0 8px 24px #193b2410}.tab{border:0;background:transparent;color:var(--muted);font:inherit;font-size:14px;font-weight:750;padding:12px 15px;border-radius:10px;white-space:nowrap;cursor:pointer}.tab.active{background:var(--green);color:white}.layout{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(280px,.92fr);gap:18px;margin-top:18px}.panel{background:white;border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:0 6px 20px #193b2408}.panel h2{margin:0 0 5px;font-size:21px;letter-spacing:-.5px}.sub{margin:0 0 22px;color:var(--muted);font-size:13px}.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}label{font-size:13px;font-weight:700;color:#35453a}.hint{font-size:11px;color:var(--muted);font-weight:400}input,select{width:100%;border:1px solid #d5ded4;border-radius:10px;padding:12px 12px;font:inherit;font-size:14px;color:var(--ink);background:#fff;outline:none}input:focus,select:focus{border-color:var(--green2);box-shadow:0 0 0 3px #1d674817}.btn{border:0;border-radius:11px;background:var(--lime);color:#1a2b1e;font-weight:850;font-size:14px;padding:14px 18px;cursor:pointer;width:100%;margin-top:20px}.btn:hover{filter:brightness(.97)}.results{background:var(--green);color:white;border-radius:18px;padding:24px;min-height:100%}.result-label{font-size:12px;color:#d3e2d5}.big-number{font-size:clamp(27px,4vw,38px);font-weight:850;letter-spacing:-1.1px;margin:3px 0 17px;overflow-wrap:anywhere}.metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{background:#ffffff12;border:1px solid #ffffff20;padding:14px;border-radius:12px;min-width:0}.metric span{display:block;font-size:11px;color:#d1dfd3}.metric strong{display:block;font-size:17px;margin-top:5px;overflow-wrap:anywhere}.divider{height:1px;background:#ffffff25;margin:20px 0}.results h3{font-size:15px;margin:0 0 8px}.advice{font-size:13px;color:#e3ece4;margin:0}.status{display:inline-block;border-radius:999px;background:#ffffff17;padding:6px 10px;font-size:11px;font-weight:800;margin-top:13px}.note{font-size:11px;color:#d1dfd3;margin-top:18px}.hidden{display:none!important}.foot{max-width:1100px;margin:auto;padding:0 20px 28px;color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.small-btn{background:transparent;border:1px solid #ffffff55;color:white;padding:8px 11px;border-radius:9px;font:inherit;font-size:12px;cursor:pointer}.empty-state{padding:14px;border:1px dashed #ffffff50;border-radius:12px;color:#dce9de;font-size:13px}
+@media(max-width:760px){.layout{grid-template-columns:1fr}.hero{padding-top:32px}.field-grid{grid-template-columns:1fr 1fr}.panel,.results{padding:20px}.top{align-items:flex-start}}@media(max-width:420px){.field-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.tag{display:none}.hero h1{font-size:35px}}
 </style>
 </head>
 <body>
-<header><div class="nav"><div class="brand">Produktif<span>Tools</span></div><nav aria-label="Navigasi utama"><a href="#tools">Semua Tools</a><a href="#tentang">Tentang</a></nav></div></header>
-<section class="hero"><div class="hero-inner"><span class="eyebrow">GRATIS • PRAKTIS • LANGSUNG DI BROWSER</span><h1>Kerja lebih cerdas, mulai dari sini.</h1><p>Kumpulan tools sederhana untuk membantu pekerjaan, belajar, dan aktivitas harian. Tanpa instalasi dan tanpa perlu membuat akun.</p><form class="search" id="searchForm"><input id="searchInput" type="text" placeholder="Cari tools, misalnya: kata atau timer" aria-label="Cari tools"><button type="submit">Cari Tools</button></form></div></section>
+<header><div class="wrap">
+  <div class="top"><div class="brand">✳ UMKM Pintar</div><span class="tag">GRATIS • TANPA LOGIN</span></div>
+  <div class="hero"><div class="eyebrow">Teman hitung usaha</div><h1>Keputusan usaha,<br><strong>lebih terukur.</strong></h1><p>Kalkulator sederhana untuk membantu pelaku UMKM menghitung harga jual, laba, dan target penjualan. Isi angka usahamu, lalu dapatkan analisis otomatis.</p></div>
+</div></header>
 <main>
-<div class="section-head" id="tools"><div><h2>Tools Produktivitas</h2><p>Pilih alat yang kamu butuhkan. Hasil diproses langsung di perangkatmu.</p></div><span class="small" id="toolCount">4 tools tersedia</span></div>
-<div class="grid" id="toolGrid">
-<section class="tool" data-search="teks text kata karakter huruf kapital lowercase uppercase spasi">
-<div class="tool-top"><div class="tool-icon">📝</div><div><h3>Pengolah Teks</h3><p class="desc">Hitung kata, karakter, dan rapikan tulisan.</p></div></div>
-<label class="field" for="textInput">Masukkan teks</label><textarea id="textInput" placeholder="Ketik atau tempel teks di sini..."></textarea>
-<div class="stats"><span class="stat">Kata: <b id="wordCount">0</b></span><span class="stat">Karakter: <b id="charCount">0</b></span><span class="stat">Tanpa spasi: <b id="noSpaceCount">0</b></span></div>
-<div class="btns"><button class="btn" id="upperBtn">HURUF BESAR</button><button class="btn secondary" id="lowerBtn">huruf kecil</button><button class="btn secondary" id="cleanBtn">Rapikan spasi</button><button class="btn yellow" id="copyTextBtn">Salin teks</button><button class="btn secondary" id="clearTextBtn">Hapus</button></div><p class="small" id="textStatus" aria-live="polite"></p>
-</section>
-<section class="tool" data-search="kalkulator hitung matematika tambah kurang kali bagi">
-<div class="tool-top"><div class="tool-icon">🧮</div><div><h3>Kalkulator Dasar</h3><p class="desc">Hitung operasi matematika dasar.</p></div></div>
-<label class="field" for="calcA">Angka pertama</label><input id="calcA" type="number" step="any" placeholder="Contoh: 125">
-<label class="field" for="calcOp">Operasi</label><select id="calcOp"><option value="+">Penjumlahan (+)</option><option value="-">Pengurangan (−)</option><option value="*">Perkalian (×)</option><option value="/">Pembagian (÷)</option></select>
-<label class="field" for="calcB">Angka kedua</label><input id="calcB" type="number" step="any" placeholder="Contoh: 25">
-<div class="btns"><button class="btn" id="calcBtn">Hitung</button><button class="btn secondary" id="calcClear">Reset</button></div><div class="result" id="calcResult" aria-live="polite">Hasil akan muncul di sini.</div>
-</section>
-<section class="tool" data-search="diskon persen harga potongan belanja hemat">
-<div class="tool-top"><div class="tool-icon">🏷️</div><div><h3>Kalkulator Diskon</h3><p class="desc">Hitung potongan harga dan harga akhir.</p></div></div>
-<label class="field" for="priceInput">Harga awal (Rp)</label><input id="priceInput" type="number" min="0" step="any" placeholder="Contoh: 150000">
-<label class="field" for="discountInput">Diskon (%)</label><input id="discountInput" type="number" min="0" max="100" step="any" placeholder="Contoh: 20">
-<div class="btns"><button class="btn" id="discountBtn">Hitung diskon</button><button class="btn secondary" id="discountClear">Reset</button></div><div class="result" id="discountResult" aria-live="polite">Harga akhir akan muncul di sini.</div>
-</section>
-<section class="tool" data-search="pomodoro timer fokus waktu belajar kerja istirahat">
-<div class="tool-top"><div class="tool-icon">⏱️</div><div><h3>Timer Fokus</h3><p class="desc">Gunakan sesi fokus dan istirahat singkat.</p></div></div>
-<div class="timer"><div class="time" id="timerDisplay">25:00</div><div id="timerLabel">Waktu fokus</div><p class="small">Tetap buka halaman ini saat timer berjalan.</p></div>
-<div class="row"><div><label class="field" for="focusMinutes">Fokus (menit)</label><input id="focusMinutes" type="number" min="1" max="180" value="25"></div><div><label class="field" for="breakMinutes">Istirahat (menit)</label><input id="breakMinutes" type="number" min="1" max="60" value="5"></div></div>
-<div class="btns"><button class="btn" id="timerStart">Mulai</button><button class="btn secondary" id="timerPause">Jeda</button><button class="btn yellow" id="timerReset">Reset</button><button class="btn secondary" id="timerSwitch">Ganti sesi</button></div><p class="small" id="timerStatus" aria-live="polite"></p>
-</section>
-<section class="tool" data-search="tanggal date calculator selisih hari kalender durasi">
-<div class="tool-top"><div class="tool-icon">📅</div><div><h3>Kalkulator Tanggal</h3><p class="desc">Ketahui selisih hari di antara dua tanggal.</p></div></div>
-<div class="row"><div><label class="field" for="dateStart">Tanggal mulai</label><input type="date" id="dateStart"></div><div><label class="field" for="dateEnd">Tanggal akhir</label><input type="date" id="dateEnd"></div></div>
-<div class="btns"><button class="btn" id="dateCalcBtn">Hitung selisih</button><button class="btn secondary" id="dateTodayBtn">Isi hari ini</button></div><div class="result" id="dateResult" aria-live="polite">Selisih tanggal akan muncul di sini.</div>
-</section>
-<section class="tool" data-search="persentase persen kenaikan penurunan rasio">
-<div class="tool-top"><div class="tool-icon">📊</div><div><h3>Kalkulator Persentase</h3><p class="desc">Hitung persentase dari suatu nilai.</p></div></div>
-<label class="field" for="percentInput">Persentase (%)</label><input id="percentInput" type="number" step="any" placeholder="Contoh: 15">
-<label class="field" for="percentBase">Dari nilai</label><input id="percentBase" type="number" step="any" placeholder="Contoh: 200000">
-<div class="btns"><button class="btn" id="percentBtn">Hitung</button><button class="btn secondary" id="percentClear">Reset</button></div><div class="result" id="percentResult" aria-live="polite">Hasil akan muncul di sini.</div>
-</section>
-</div>
-<div class="notice"><b>Privasi:</b> tools di halaman ini dirancang memproses input langsung di browser. Jangan memasukkan informasi rahasia pada perangkat bersama. Timer memerlukan halaman tetap terbuka agar hitung mundur berjalan.</div>
-<section class="content" id="tentang"><h2>Tentang ProduktifTools</h2><p>ProduktifTools adalah kumpulan alat bantu digital sederhana untuk pekerjaan sehari-hari. Gunakan pengolah teks untuk merapikan tulisan, kalkulator untuk membantu perhitungan, timer untuk mengatur waktu fokus, dan kalkulator tanggal untuk menghitung durasi.</p><p>Website ini menyediakan alat dasar gratis dan bukan pengganti pemeriksaan profesional untuk perhitungan yang berisiko tinggi. Hasil perhitungan sebaiknya diperiksa kembali sesuai kebutuhan.</p><h2>Kontak dan kebijakan</h2><p>Tambahkan alamat kontak yang valid, halaman kebijakan privasi, dan informasi pengelola sebelum mengajukan monetisasi iklan. Jangan menampilkan klaim bahwa website menggunakan AI generatif jika fitur tersebut belum tersedia.</p></section>
+  <div class="tabs" role="tablist" aria-label="Pilih kalkulator">
+    <button class="tab active" data-tab="harga" role="tab">🏷️ Harga Jual</button>
+    <button class="tab" data-tab="laba" role="tab">📈 Laba & Margin</button>
+    <button class="tab" data-tab="bep" role="tab">🎯 Titik Impas (BEP)</button>
+  </div>
+  <div class="layout">
+    <section class="panel">
+      <div id="form-harga">
+        <h2>Kalkulator Harga Jual</h2><p class="sub">Hitung biaya per produk dan harga jual berdasarkan target margin.</p>
+        <div class="field-grid">
+          <div class="field full"><label for="namaProduk">Nama produk <span class="hint">(opsional)</span></label><input id="namaProduk" placeholder="Contoh: Rice bowl ayam"></div>
+          <div class="field"><label for="bahan">Bahan baku per batch (Rp)</label><input id="bahan" type="number" min="0" value="150000"></div>
+          <div class="field"><label for="jumlah">Produk jadi per batch (pcs)</label><input id="jumlah" type="number" min="1" value="25"></div>
+          <div class="field"><label for="kemasan">Kemasan per produk (Rp)</label><input id="kemasan" type="number" min="0" value="1500"></div>
+          <div class="field"><label for="tenaga">Tenaga kerja per batch (Rp)</label><input id="tenaga" type="number" min="0" value="30000"></div>
+          <div class="field"><label for="operasional">Operasional per batch (Rp)</label><input id="operasional" type="number" min="0" value="20000"></div>
+          <div class="field"><label for="marginTarget">Target margin laba (%)</label><input id="marginTarget" type="number" min="1" max="90" value="30"></div>
+        </div>
+        <button class="btn" id="hitungHarga">Hitung harga jual →</button>
+      </div>
+      <div id="form-laba" class="hidden">
+        <h2>Kalkulator Laba & Margin</h2><p class="sub">Lihat perkiraan hasil usaha dalam satu periode, misalnya sehari atau sebulan.</p>
+        <div class="field-grid">
+          <div class="field full"><label for="periode">Periode perhitungan</label><select id="periode"><option>Per hari</option><option>Per minggu</option><option selected>Per bulan</option></select></div>
+          <div class="field"><label for="omzet">Total omzet (Rp)</label><input id="omzet" type="number" min="0" value="12000000"></div>
+          <div class="field"><label for="biayaVariabel">Total biaya variabel (Rp)</label><input id="biayaVariabel" type="number" min="0" value="6000000"></div>
+          <div class="field full"><label for="biayaTetap">Total biaya tetap (Rp)</label><input id="biayaTetap" type="number" min="0" value="2500000"></div>
+        </div>
+        <button class="btn" id="hitungLaba">Hitung laba →</button>
+      </div>
+      <div id="form-bep" class="hidden">
+        <h2>Kalkulator Titik Impas (BEP)</h2><p class="sub">Cari jumlah unit minimum yang perlu terjual untuk menutup biaya tetap.</p>
+        <div class="field-grid">
+          <div class="field full"><label for="hargaBep">Harga jual per unit (Rp)</label><input id="hargaBep" type="number" min="0" value="20000"></div>
+          <div class="field"><label for="biayaUnit">Biaya variabel per unit (Rp)</label><input id="biayaUnit" type="number" min="0" value="10000"></div>
+          <div class="field"><label for="tetapBep">Biaya tetap per periode (Rp)</label><input id="tetapBep" type="number" min="0" value="3000000"></div>
+          <div class="field full"><label for="targetUnit">Target laba tambahan (Rp) <span class="hint">(opsional)</span></label><input id="targetUnit" type="number" min="0" value="0"></div>
+        </div>
+        <button class="btn" id="hitungBep">Hitung titik impas →</button>
+      </div>
+    </section>
+    <aside class="results" aria-live="polite">
+      <div class="top"><div class="result-label">HASIL PERHITUNGAN</div><button class="small-btn" id="salin">Salin hasil</button></div>
+      <div id="hasilUtama" class="big-number">Rp 10.000</div>
+      <div id="labelUtama" class="result-label">Estimasi harga jual per produk</div>
+      <div class="divider"></div>
+      <div class="metrics">
+        <div class="metric"><span id="labelM1">Modal per produk</span><strong id="metric1">Rp 7.000</strong></div>
+        <div class="metric"><span id="labelM2">Laba per produk</span><strong id="metric2">Rp 3.000</strong></div>
+        <div class="metric"><span id="labelM3">Margin laba</span><strong id="metric3">30%</strong></div>
+        <div class="metric"><span id="labelM4">Total per batch</span><strong id="metric4">Rp 250.000</strong></div>
+      </div>
+      <div class="divider"></div>
+      <h3>💡 Analisis otomatis</h3>
+      <p class="advice" id="saran">Masukkan data usahamu dan klik tombol hitung untuk mendapatkan saran.</p>
+      <span class="status" id="status">ANALISIS LOKAL AKTIF</span>
+      <p class="note">Hasil merupakan estimasi berdasarkan angka yang kamu masukkan, bukan nasihat akuntansi atau pajak. Pastikan biaya, pajak, diskon, dan komisi platform ikut dipertimbangkan.</p>
+    </aside>
+  </div>
 </main>
-<footer>© <span id="year"></span> ProduktifTools · Tools produktivitas gratis</footer>
+<footer class="foot"><span>© <span id="tahun"></span> UMKM Pintar</span><span>Gratis digunakan • Data dihitung di perangkatmu</span></footer>
 <script>
-const $=id=>document.getElementById(id);
-$('year').textContent=new Date().getFullYear();
-const textInput=$('textInput');
-function updateTextStats(){const v=textInput.value;$('wordCount').textContent=v.trim()?v.trim().split(/\s+/).length:0;$('charCount').textContent=v.length;$('noSpaceCount').textContent=v.replace(/\s/g,'').length}
-textInput.addEventListener('input',updateTextStats);
-$('upperBtn').addEventListener('click',()=>{textInput.value=textInput.value.toLocaleUpperCase('id-ID');updateTextStats()});
-$('lowerBtn').addEventListener('click',()=>{textInput.value=textInput.value.toLocaleLowerCase('id-ID');updateTextStats()});
-$('cleanBtn').addEventListener('click',()=>{textInput.value=textInput.value.replace(/[ \t]+/g,' ').replace(/\s*\n\s*/g,'\n').trim();updateTextStats()});
-$('clearTextBtn').addEventListener('click',()=>{textInput.value='';updateTextStats();$('textStatus').textContent='Teks dihapus.'});
-$('copyTextBtn').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(textInput.value);$('textStatus').textContent='Teks berhasil disalin.'}catch(e){textInput.select();$('textStatus').textContent='Pilih teks lalu salin dengan Ctrl+C.'}});
-$('calcBtn').addEventListener('click',()=>{const a=Number($('calcA').value),b=Number($('calcB').value),op=$('calcOp').value;if($('calcA').value===''||$('calcB').value==='')return $('calcResult').textContent='Masukkan kedua angka terlebih dahulu.';if(op==='/'&&b===0)return $('calcResult').textContent='Tidak dapat membagi dengan nol.';const r=op==='+'?a+b:op==='-'?a-b:op==='*'?a*b:a/b;$('calcResult').textContent='Hasil: '+new Intl.NumberFormat('id-ID',{maximumFractionDigits:10}).format(r)});
-$('calcClear').addEventListener('click',()=>{$('calcA').value='';$('calcB').value='';$('calcResult').textContent='Hasil akan muncul di sini.'});
-const rupiah=n=>new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(n);
-$('discountBtn').addEventListener('click',()=>{const p=Number($('priceInput').value),d=Number($('discountInput').value);if($('priceInput').value===''||$('discountInput').value==='')return $('discountResult').textContent='Masukkan harga dan persentase diskon.';if(p<0||d<0||d>100)return $('discountResult').textContent='Harga harus ≥ 0 dan diskon 0–100%.';const cut=p*d/100;$('discountResult').textContent=`Potongan: ${rupiah(cut)} · Harga akhir: ${rupiah(p-cut)}`});
-$('discountClear').addEventListener('click',()=>{$('priceInput').value='';$('discountInput').value='';$('discountResult').textContent='Harga akhir akan muncul di sini.'});
-$('percentBtn').addEventListener('click',()=>{const p=Number($('percentInput').value),b=Number($('percentBase').value);if($('percentInput').value===''||$('percentBase').value==='')return $('percentResult').textContent='Masukkan persentase dan nilai dasar.';$('percentResult').textContent=`${p}% dari ${new Intl.NumberFormat('id-ID').format(b)} = ${new Intl.NumberFormat('id-ID',{maximumFractionDigits:8}).format(p/100*b)}`});
-$('percentClear').addEventListener('click',()=>{$('percentInput').value='';$('percentBase').value='';$('percentResult').textContent='Hasil akan muncul di sini.'});
-let remaining=1500,interval=null,isBreak=false;
-function renderTimer(){$('timerDisplay').textContent=String(Math.floor(remaining/60)).padStart(2,'0')+':'+String(remaining%60).padStart(2,'0');$('timerLabel').textContent=isBreak?'Waktu istirahat':'Waktu fokus'}
-function readMinutes(id,min,max){const n=Number($(id).value);return Number.isFinite(n)&&n>=min&&n<=max?n:null}
-function stopTimer(){if(interval!==null){clearInterval(interval);interval=null}}
-$('timerStart').addEventListener('click',()=>{if(interval!==null)return;interval=setInterval(()=>{remaining--;renderTimer();if(remaining<=0){stopTimer();$('timerStatus').textContent=isBreak?'Sesi istirahat selesai.':'Sesi fokus selesai. Saatnya jeda!';if(typeof alert==='function')alert($('timerStatus').textContent)}},1000);$('timerStatus').textContent='Timer berjalan.'});
-$('timerPause').addEventListener('click',()=>{stopTimer();$('timerStatus').textContent='Timer dijeda.'});
-$('timerReset').addEventListener('click',()=>{stopTimer();isBreak=false;remaining=(readMinutes('focusMinutes',1,180)||25)*60;renderTimer();$('timerStatus').textContent='Timer direset.'});
-$('timerSwitch').addEventListener('click',()=>{stopTimer();isBreak=!isBreak;remaining=(readMinutes(isBreak?'breakMinutes':'focusMinutes',1,isBreak?60:180)||(isBreak?5:25))*60;renderTimer();$('timerStatus').textContent='Sesi diganti.'});
-$('focusMinutes').addEventListener('change',()=>{if(!isBreak&&interval===null){remaining=(readMinutes('focusMinutes',1,180)||25)*60;renderTimer()}});
-$('breakMinutes').addEventListener('change',()=>{if(isBreak&&interval===null){remaining=(readMinutes('breakMinutes',1,60)||5)*60;renderTimer()}});
-renderTimer();
-const isoLocal=d=>{const x=new Date(d.getTime()-d.getTimezoneOffset()*60000);return x.toISOString().slice(0,10)};
-$('dateStart').value=isoLocal(new Date());$('dateEnd').value=isoLocal(new Date());
-$('dateCalcBtn').addEventListener('click',()=>{const a=$('dateStart').value,b=$('dateEnd').value;if(!a||!b)return $('dateResult').textContent='Pilih kedua tanggal.';const days=Math.round((Date.parse(b+'T00:00:00Z')-Date.parse(a+'T00:00:00Z'))/86400000);$('dateResult').textContent=`Selisih: ${Math.abs(days)} hari${days<0?' (tanggal akhir lebih awal)':''}. Jika kedua tanggal dihitung termasuk, totalnya ${Math.abs(days)+1} hari.`});
-$('dateTodayBtn').addEventListener('click',()=>{$('dateStart').value=isoLocal(new Date());$('dateEnd').value=isoLocal(new Date());$('dateResult').textContent='Tanggal diisi dengan hari ini.'});
-$('searchForm').addEventListener('submit',e=>{e.preventDefault();const q=$('searchInput').value.trim().toLocaleLowerCase('id-ID');let visible=0;document.querySelectorAll('.tool').forEach(card=>{const match=!q||(card.dataset.search+' '+card.innerText).toLocaleLowerCase('id-ID').includes(q);card.classList.toggle('hidden',!match);if(match)visible++});$('toolCount').textContent=visible+' tools ditampilkan';$('tools').scrollIntoView({behavior:'smooth'})});
+const rupiah = n => new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(Number.isFinite(n)?n:0);
+const num = id => Math.max(0, Number(document.getElementById(id).value)||0);
+const set = (id,val) => document.getElementById(id).textContent=val;
+let active='harga', lastSummary='Estimasi harga jual per produk: Rp 10.000';
+function showResult(main,label,metrics,advice,status='ANALISIS LOKAL AKTIF'){
+ set('hasilUtama',main);set('labelUtama',label);
+ ['metric1','metric2','metric3','metric4'].forEach((id,i)=>set(id,metrics[i]));
+ set('saran',advice);set('status',status);lastSummary=label+': '+main+'\\n'+
+ ['labelM1','labelM2','labelM3','labelM4'].map((id,i)=>document.getElementById(id).textContent+': '+metrics[i]).join('\\n')+'\\nAnalisis: '+advice;
+}
+function harga(){
+ const batch=num('bahan')+num('tenaga')+num('operasional'), qty=num('jumlah'), kem=num('kemasan'), margin=num('marginTarget');
+ if(qty<=0){alert('Jumlah produk jadi harus lebih dari 0.');return}
+ if(margin>=100){alert('Target margin harus kurang dari 100%.');return}
+ const cost=batch/qty+kem, price=cost/(1-margin/100), profit=price-cost, total=price*qty;
+ const product=document.getElementById('namaProduk').value.trim();
+ let advice=cost<=0?'Masukkan biaya yang sesuai agar estimasi harga lebih bermakna.':margin<15?'Margin target cukup tipis. Cek kembali biaya tak terduga, produk rusak, diskon, dan komisi platform.':margin>50?'Target margin tinggi. Uji daya beli pelanggan dan bandingkan dengan produk sejenis sebelum menetapkan harga.':'Target margin terlihat sebagai titik awal. Uji harga pada pelanggan dan evaluasi biaya secara berkala.';
+ if(product)advice='Untuk '+product+': '+advice;
+ set('labelM1','Modal per produk');set('labelM2','Laba per produk');set('labelM3','Margin target');set('labelM4','Omzet jika 1 batch terjual');
+ showResult(rupiah(Math.ceil(price/500)*500),'Estimasi harga jual per produk',[rupiah(cost),rupiah(price-cost),margin.toLocaleString('id-ID')+'%',rupiah(Math.ceil(price/500)*500*qty)],advice);
+}
+function laba(){
+ const omzet=num('omzet'), variable=num('biayaVariabel'), fixed=num('biayaTetap'), profit=omzet-variable-fixed;
+ const margin=omzet>0?profit/omzet*100:0, variablePct=omzet>0?variable/omzet*100:0;
+ set('labelM1','Omzet');set('labelM2','Biaya variabel');set('labelM3','Biaya tetap');set('labelM4','Margin laba');
+ let advice=omzet===0?'Omzet masih nol. Masukkan omzet untuk menghitung margin dan laba.':profit<0?'Usaha mengalami rugi pada periode ini. Tinjau biaya variabel, biaya tetap, harga jual, dan volume penjualan.':margin<10?'Laba positif, tetapi margin masih di bawah 10%. Cari biaya yang dapat ditekan atau evaluasi harga dan bauran produk.':margin<25?'Usaha menghasilkan laba dengan margin moderat. Pantau biaya dan arus kas agar hasil tetap stabil.':'Margin terlihat kuat berdasarkan data ini. Pastikan angka sudah mencakup biaya rutin, penyusutan, pajak, dan biaya tak terduga.';
+ showResult(rupiah(profit),'Estimasi laba bersih '+document.getElementById('periode').value.toLowerCase(),[rupiah(omzet),rupiah(variable),rupiah(fixed),margin.toLocaleString('id-ID',{maximumFractionDigits:1})+'%'],advice,profit<0?'PERLU EVALUASI':'ANALISIS LOKAL AKTIF');
+}
+function bep(){
+ const price=num('hargaBep'), cost=num('biayaUnit'), fixed=num('tetapBep'), target=num('targetUnit'), contribution=price-cost;
+ set('labelM1','Kontribusi per unit');set('labelM2','Biaya tetap');set('labelM3','Target laba');set('labelM4','Omzet saat target');
+ if(price<=cost){showResult('Belum tercapai','Harga jual harus lebih tinggi dari biaya variabel',[rupiah(contribution),rupiah(fixed),rupiah(target),rupiah(0)],'Setiap penjualan belum menghasilkan kontribusi positif untuk menutup biaya tetap. Evaluasi harga jual atau biaya variabel.','PERLU EVALUASI');return}
+ const units=Math.ceil((fixed+target)/contribution), revenue=units*price;
+ const advice=target>0?'Untuk menutup biaya tetap sekaligus mencapai target laba, usahakan menjual setidaknya '+units.toLocaleString('id-ID')+' unit pada periode ini.':'Titik impas tercapai saat penjualan sekitar '+units.toLocaleString('id-ID')+' unit. Penjualan di atas angka ini berpotensi menghasilkan laba, selama asumsi biaya dan harga tetap.';
+ showResult(units.toLocaleString('id-ID')+' unit','Target penjualan minimum',[rupiah(contribution),rupiah(fixed),rupiah(target),rupiah(revenue)],advice);
+}
+document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>{
+ active=btn.dataset.tab;document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b===btn));
+ ['harga','laba','bep'].forEach(t=>document.getElementById('form-'+t).classList.toggle('hidden',t!==active));
+ if(active==='harga')harga();if(active==='laba')laba();if(active==='bep')bep();
+}));
+document.getElementById('hitungHarga').addEventListener('click',harga);
+document.getElementById('hitungLaba').addEventListener('click',laba);
+document.getElementById('hitungBep').addEventListener('click',bep);
+document.getElementById('salin').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(lastSummary);const b=document.getElementById('salin');b.textContent='Tersalin ✓';setTimeout(()=>b.textContent='Salin hasil',1500)}catch(e){alert('Salin otomatis tidak tersedia. Pilih dan salin teks hasil secara manual.')}});
+document.getElementById('tahun').textContent=new Date().getFullYear();
+harga();
 </script>
 </body>
 </html>'''
+
 path = Path("/mnt/data/index.html")
 path.write_text(html, encoding="utf-8")
-print(f"File siap: {path} ({path.stat().st_size:,} bytes)")
+print(f"File berhasil dibuat: {path}")
+print(f"Ukuran: {path.stat().st_size:,} byte")
