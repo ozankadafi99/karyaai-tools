@@ -1,141 +1,139 @@
-from pathlib import Path
+import os, zipfile, textwrap
 
-html = r'''<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="AI Kalkulator UMKM gratis untuk menghitung harga jual, keuntungan, margin, dan titik impas usaha kecil.">
-<meta name="theme-color" content="#123b2a">
-<title>UMKM Pintar — Kalkulator Usaha Gratis</title>
-<style>
-:root{--green:#123b2a;--green2:#1d6748;--lime:#d7f36b;--paper:#f6f8f3;--ink:#17231c;--muted:#657168;--line:#dfe6dd;--white:#fff;--orange:#fff0d9}
-*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}
-header{background:var(--green);color:white;padding:26px 20px 54px}.wrap{max-width:1100px;margin:auto}.top{display:flex;align-items:center;justify-content:space-between;gap:14px}.brand{font-weight:850;letter-spacing:-.5px;font-size:20px}.tag{font-size:12px;border:1px solid #ffffff55;border-radius:999px;padding:6px 10px;color:#eaf4e9}.hero{max-width:720px;padding-top:42px}.eyebrow{color:var(--lime);font-size:12px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase}.hero h1{font-size:clamp(32px,5vw,52px);line-height:1.08;letter-spacing:-1.8px;margin:12px 0}.hero p{color:#d6e3d8;max-width:620px;margin:0;font-size:16px}.hero strong{color:var(--lime)}
-main{max-width:1100px;margin:-28px auto 0;padding:0 20px 44px}.tabs{display:flex;gap:8px;overflow:auto;background:white;border:1px solid var(--line);border-radius:16px;padding:8px;box-shadow:0 8px 24px #193b2410}.tab{border:0;background:transparent;color:var(--muted);font:inherit;font-size:14px;font-weight:750;padding:12px 15px;border-radius:10px;white-space:nowrap;cursor:pointer}.tab.active{background:var(--green);color:white}.layout{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(280px,.92fr);gap:18px;margin-top:18px}.panel{background:white;border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:0 6px 20px #193b2408}.panel h2{margin:0 0 5px;font-size:21px;letter-spacing:-.5px}.sub{margin:0 0 22px;color:var(--muted);font-size:13px}.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}label{font-size:13px;font-weight:700;color:#35453a}.hint{font-size:11px;color:var(--muted);font-weight:400}input,select{width:100%;border:1px solid #d5ded4;border-radius:10px;padding:12px 12px;font:inherit;font-size:14px;color:var(--ink);background:#fff;outline:none}input:focus,select:focus{border-color:var(--green2);box-shadow:0 0 0 3px #1d674817}.btn{border:0;border-radius:11px;background:var(--lime);color:#1a2b1e;font-weight:850;font-size:14px;padding:14px 18px;cursor:pointer;width:100%;margin-top:20px}.btn:hover{filter:brightness(.97)}.results{background:var(--green);color:white;border-radius:18px;padding:24px;min-height:100%}.result-label{font-size:12px;color:#d3e2d5}.big-number{font-size:clamp(27px,4vw,38px);font-weight:850;letter-spacing:-1.1px;margin:3px 0 17px;overflow-wrap:anywhere}.metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px}.metric{background:#ffffff12;border:1px solid #ffffff20;padding:14px;border-radius:12px;min-width:0}.metric span{display:block;font-size:11px;color:#d1dfd3}.metric strong{display:block;font-size:17px;margin-top:5px;overflow-wrap:anywhere}.divider{height:1px;background:#ffffff25;margin:20px 0}.results h3{font-size:15px;margin:0 0 8px}.advice{font-size:13px;color:#e3ece4;margin:0}.status{display:inline-block;border-radius:999px;background:#ffffff17;padding:6px 10px;font-size:11px;font-weight:800;margin-top:13px}.note{font-size:11px;color:#d1dfd3;margin-top:18px}.hidden{display:none!important}.foot{max-width:1100px;margin:auto;padding:0 20px 28px;color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.small-btn{background:transparent;border:1px solid #ffffff55;color:white;padding:8px 11px;border-radius:9px;font:inherit;font-size:12px;cursor:pointer}.empty-state{padding:14px;border:1px dashed #ffffff50;border-radius:12px;color:#dce9de;font-size:13px}
-@media(max-width:760px){.layout{grid-template-columns:1fr}.hero{padding-top:32px}.field-grid{grid-template-columns:1fr 1fr}.panel,.results{padding:20px}.top{align-items:flex-start}}@media(max-width:420px){.field-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.tag{display:none}.hero h1{font-size:35px}}
-</style>
-</head>
-<body>
+base = "/mnt/data/kalkulator-pintar-indonesia"
+os.makedirs(base, exist_ok=True)
+os.makedirs(f"{base}/tools", exist_ok=True)
+os.makedirs(f"{base}/artikel", exist_ok=True)
+
+style = """
+:root{--navy:#0b2a54;--yellow:#ffd530;--pale:#e7f0fa;--ink:#172334;--muted:#5b6878;--white:#fff}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);line-height:1.65;background:#f7f9fc}
+header{background:var(--navy);color:white;padding:18px 20px;border-bottom:5px solid var(--yellow)}
+.wrap{max-width:1000px;margin:auto;padding:0 18px}header a{color:white;text-decoration:none}
+.brand{font-weight:800;font-size:1.25rem}.tagline{font-size:.9rem;color:#e7f0fa;margin-top:3px}
+nav{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px}nav a{font-size:.95rem}
+main{max-width:1000px;margin:28px auto;padding:0 18px}.hero,.panel,.card{background:white;border:1px solid #dce4ee;border-radius:16px;padding:22px;box-shadow:0 5px 18px #0b2a540a}
+.hero{background:linear-gradient(135deg,#e7f0fa,#fff);border-top:5px solid var(--yellow)}
+h1,h2,h3{line-height:1.25;color:var(--navy)}h1{font-size:clamp(1.8rem,4vw,2.6rem);margin-top:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin:20px 0}
+.card h3{margin-top:0}.card a,.textlink{color:#0645ad;font-weight:650}
+.button,button{display:inline-block;background:var(--navy);color:white;border:0;border-radius:9px;padding:10px 15px;text-decoration:none;font-weight:700;cursor:pointer}
+input,select,textarea{width:100%;padding:11px;border:1px solid #bdc9d8;border-radius:8px;font:inherit;margin:4px 0 12px}
+label{font-weight:650;display:block}.result{background:var(--pale);padding:14px;border-radius:10px;margin-top:14px;font-weight:700}
+small,.muted{color:var(--muted)}footer{margin-top:40px;background:#eef3f9;padding:24px 0;border-top:1px solid #dce4ee}
+footer a{margin-right:14px;color:var(--navy)}.notice{border-left:4px solid var(--yellow);padding:10px 14px;background:#fff9d8}
+article{max-width:780px}table{border-collapse:collapse;width:100%;margin:14px 0}td,th{border:1px solid #ccd6e2;padding:9px;text-align:left}
+"""
+
+header = """
 <header><div class="wrap">
-  <div class="top"><div class="brand">✳ UMKM Pintar</div><span class="tag">GRATIS • TANPA LOGIN</span></div>
-  <div class="hero"><div class="eyebrow">Teman hitung usaha</div><h1>Keputusan usaha,<br><strong>lebih terukur.</strong></h1><p>Kalkulator sederhana untuk membantu pelaku UMKM menghitung harga jual, laba, dan target penjualan. Isi angka usahamu, lalu dapatkan analisis otomatis.</p></div>
+<a class="brand" href="index.html">Kalkulator Pintar Indonesia</a>
+<div class="tagline">Tools sederhana, hasil jelas, kerja lebih praktis.</div>
+<nav><a href="index.html">Beranda</a><a href="tools/kalkulator-untung.html">Kalkulator UMKM</a><a href="tools/kalkulator-persen.html">Kalkulator Persentase</a><a href="artikel/hitung-harga-jual.html">Artikel</a><a href="tentang.html">Tentang</a></nav>
 </div></header>
-<main>
-  <div class="tabs" role="tablist" aria-label="Pilih kalkulator">
-    <button class="tab active" data-tab="harga" role="tab">🏷️ Harga Jual</button>
-    <button class="tab" data-tab="laba" role="tab">📈 Laba & Margin</button>
-    <button class="tab" data-tab="bep" role="tab">🎯 Titik Impas (BEP)</button>
-  </div>
-  <div class="layout">
-    <section class="panel">
-      <div id="form-harga">
-        <h2>Kalkulator Harga Jual</h2><p class="sub">Hitung biaya per produk dan harga jual berdasarkan target margin.</p>
-        <div class="field-grid">
-          <div class="field full"><label for="namaProduk">Nama produk <span class="hint">(opsional)</span></label><input id="namaProduk" placeholder="Contoh: Rice bowl ayam"></div>
-          <div class="field"><label for="bahan">Bahan baku per batch (Rp)</label><input id="bahan" type="number" min="0" value="150000"></div>
-          <div class="field"><label for="jumlah">Produk jadi per batch (pcs)</label><input id="jumlah" type="number" min="1" value="25"></div>
-          <div class="field"><label for="kemasan">Kemasan per produk (Rp)</label><input id="kemasan" type="number" min="0" value="1500"></div>
-          <div class="field"><label for="tenaga">Tenaga kerja per batch (Rp)</label><input id="tenaga" type="number" min="0" value="30000"></div>
-          <div class="field"><label for="operasional">Operasional per batch (Rp)</label><input id="operasional" type="number" min="0" value="20000"></div>
-          <div class="field"><label for="marginTarget">Target margin laba (%)</label><input id="marginTarget" type="number" min="1" max="90" value="30"></div>
-        </div>
-        <button class="btn" id="hitungHarga">Hitung harga jual →</button>
-      </div>
-      <div id="form-laba" class="hidden">
-        <h2>Kalkulator Laba & Margin</h2><p class="sub">Lihat perkiraan hasil usaha dalam satu periode, misalnya sehari atau sebulan.</p>
-        <div class="field-grid">
-          <div class="field full"><label for="periode">Periode perhitungan</label><select id="periode"><option>Per hari</option><option>Per minggu</option><option selected>Per bulan</option></select></div>
-          <div class="field"><label for="omzet">Total omzet (Rp)</label><input id="omzet" type="number" min="0" value="12000000"></div>
-          <div class="field"><label for="biayaVariabel">Total biaya variabel (Rp)</label><input id="biayaVariabel" type="number" min="0" value="6000000"></div>
-          <div class="field full"><label for="biayaTetap">Total biaya tetap (Rp)</label><input id="biayaTetap" type="number" min="0" value="2500000"></div>
-        </div>
-        <button class="btn" id="hitungLaba">Hitung laba →</button>
-      </div>
-      <div id="form-bep" class="hidden">
-        <h2>Kalkulator Titik Impas (BEP)</h2><p class="sub">Cari jumlah unit minimum yang perlu terjual untuk menutup biaya tetap.</p>
-        <div class="field-grid">
-          <div class="field full"><label for="hargaBep">Harga jual per unit (Rp)</label><input id="hargaBep" type="number" min="0" value="20000"></div>
-          <div class="field"><label for="biayaUnit">Biaya variabel per unit (Rp)</label><input id="biayaUnit" type="number" min="0" value="10000"></div>
-          <div class="field"><label for="tetapBep">Biaya tetap per periode (Rp)</label><input id="tetapBep" type="number" min="0" value="3000000"></div>
-          <div class="field full"><label for="targetUnit">Target laba tambahan (Rp) <span class="hint">(opsional)</span></label><input id="targetUnit" type="number" min="0" value="0"></div>
-        </div>
-        <button class="btn" id="hitungBep">Hitung titik impas →</button>
-      </div>
-    </section>
-    <aside class="results" aria-live="polite">
-      <div class="top"><div class="result-label">HASIL PERHITUNGAN</div><button class="small-btn" id="salin">Salin hasil</button></div>
-      <div id="hasilUtama" class="big-number">Rp 10.000</div>
-      <div id="labelUtama" class="result-label">Estimasi harga jual per produk</div>
-      <div class="divider"></div>
-      <div class="metrics">
-        <div class="metric"><span id="labelM1">Modal per produk</span><strong id="metric1">Rp 7.000</strong></div>
-        <div class="metric"><span id="labelM2">Laba per produk</span><strong id="metric2">Rp 3.000</strong></div>
-        <div class="metric"><span id="labelM3">Margin laba</span><strong id="metric3">30%</strong></div>
-        <div class="metric"><span id="labelM4">Total per batch</span><strong id="metric4">Rp 250.000</strong></div>
-      </div>
-      <div class="divider"></div>
-      <h3>💡 Analisis otomatis</h3>
-      <p class="advice" id="saran">Masukkan data usahamu dan klik tombol hitung untuk mendapatkan saran.</p>
-      <span class="status" id="status">ANALISIS LOKAL AKTIF</span>
-      <p class="note">Hasil merupakan estimasi berdasarkan angka yang kamu masukkan, bukan nasihat akuntansi atau pajak. Pastikan biaya, pajak, diskon, dan komisi platform ikut dipertimbangkan.</p>
-    </aside>
-  </div>
-</main>
-<footer class="foot"><span>© <span id="tahun"></span> UMKM Pintar</span><span>Gratis digunakan • Data dihitung di perangkatmu</span></footer>
-<script>
-const rupiah = n => new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(Number.isFinite(n)?n:0);
-const num = id => Math.max(0, Number(document.getElementById(id).value)||0);
-const set = (id,val) => document.getElementById(id).textContent=val;
-let active='harga', lastSummary='Estimasi harga jual per produk: Rp 10.000';
-function showResult(main,label,metrics,advice,status='ANALISIS LOKAL AKTIF'){
- set('hasilUtama',main);set('labelUtama',label);
- ['metric1','metric2','metric3','metric4'].forEach((id,i)=>set(id,metrics[i]));
- set('saran',advice);set('status',status);lastSummary=label+': '+main+'\\n'+
- ['labelM1','labelM2','labelM3','labelM4'].map((id,i)=>document.getElementById(id).textContent+': '+metrics[i]).join('\\n')+'\\nAnalisis: '+advice;
-}
-function harga(){
- const batch=num('bahan')+num('tenaga')+num('operasional'), qty=num('jumlah'), kem=num('kemasan'), margin=num('marginTarget');
- if(qty<=0){alert('Jumlah produk jadi harus lebih dari 0.');return}
- if(margin>=100){alert('Target margin harus kurang dari 100%.');return}
- const cost=batch/qty+kem, price=cost/(1-margin/100), profit=price-cost, total=price*qty;
- const product=document.getElementById('namaProduk').value.trim();
- let advice=cost<=0?'Masukkan biaya yang sesuai agar estimasi harga lebih bermakna.':margin<15?'Margin target cukup tipis. Cek kembali biaya tak terduga, produk rusak, diskon, dan komisi platform.':margin>50?'Target margin tinggi. Uji daya beli pelanggan dan bandingkan dengan produk sejenis sebelum menetapkan harga.':'Target margin terlihat sebagai titik awal. Uji harga pada pelanggan dan evaluasi biaya secara berkala.';
- if(product)advice='Untuk '+product+': '+advice;
- set('labelM1','Modal per produk');set('labelM2','Laba per produk');set('labelM3','Margin target');set('labelM4','Omzet jika 1 batch terjual');
- showResult(rupiah(Math.ceil(price/500)*500),'Estimasi harga jual per produk',[rupiah(cost),rupiah(price-cost),margin.toLocaleString('id-ID')+'%',rupiah(Math.ceil(price/500)*500*qty)],advice);
-}
-function laba(){
- const omzet=num('omzet'), variable=num('biayaVariabel'), fixed=num('biayaTetap'), profit=omzet-variable-fixed;
- const margin=omzet>0?profit/omzet*100:0, variablePct=omzet>0?variable/omzet*100:0;
- set('labelM1','Omzet');set('labelM2','Biaya variabel');set('labelM3','Biaya tetap');set('labelM4','Margin laba');
- let advice=omzet===0?'Omzet masih nol. Masukkan omzet untuk menghitung margin dan laba.':profit<0?'Usaha mengalami rugi pada periode ini. Tinjau biaya variabel, biaya tetap, harga jual, dan volume penjualan.':margin<10?'Laba positif, tetapi margin masih di bawah 10%. Cari biaya yang dapat ditekan atau evaluasi harga dan bauran produk.':margin<25?'Usaha menghasilkan laba dengan margin moderat. Pantau biaya dan arus kas agar hasil tetap stabil.':'Margin terlihat kuat berdasarkan data ini. Pastikan angka sudah mencakup biaya rutin, penyusutan, pajak, dan biaya tak terduga.';
- showResult(rupiah(profit),'Estimasi laba bersih '+document.getElementById('periode').value.toLowerCase(),[rupiah(omzet),rupiah(variable),rupiah(fixed),margin.toLocaleString('id-ID',{maximumFractionDigits:1})+'%'],advice,profit<0?'PERLU EVALUASI':'ANALISIS LOKAL AKTIF');
-}
-function bep(){
- const price=num('hargaBep'), cost=num('biayaUnit'), fixed=num('tetapBep'), target=num('targetUnit'), contribution=price-cost;
- set('labelM1','Kontribusi per unit');set('labelM2','Biaya tetap');set('labelM3','Target laba');set('labelM4','Omzet saat target');
- if(price<=cost){showResult('Belum tercapai','Harga jual harus lebih tinggi dari biaya variabel',[rupiah(contribution),rupiah(fixed),rupiah(target),rupiah(0)],'Setiap penjualan belum menghasilkan kontribusi positif untuk menutup biaya tetap. Evaluasi harga jual atau biaya variabel.','PERLU EVALUASI');return}
- const units=Math.ceil((fixed+target)/contribution), revenue=units*price;
- const advice=target>0?'Untuk menutup biaya tetap sekaligus mencapai target laba, usahakan menjual setidaknya '+units.toLocaleString('id-ID')+' unit pada periode ini.':'Titik impas tercapai saat penjualan sekitar '+units.toLocaleString('id-ID')+' unit. Penjualan di atas angka ini berpotensi menghasilkan laba, selama asumsi biaya dan harga tetap.';
- showResult(units.toLocaleString('id-ID')+' unit','Target penjualan minimum',[rupiah(contribution),rupiah(fixed),rupiah(target),rupiah(revenue)],advice);
-}
-document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>{
- active=btn.dataset.tab;document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b===btn));
- ['harga','laba','bep'].forEach(t=>document.getElementById('form-'+t).classList.toggle('hidden',t!==active));
- if(active==='harga')harga();if(active==='laba')laba();if(active==='bep')bep();
-}));
-document.getElementById('hitungHarga').addEventListener('click',harga);
-document.getElementById('hitungLaba').addEventListener('click',laba);
-document.getElementById('hitungBep').addEventListener('click',bep);
-document.getElementById('salin').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(lastSummary);const b=document.getElementById('salin');b.textContent='Tersalin ✓';setTimeout(()=>b.textContent='Salin hasil',1500)}catch(e){alert('Salin otomatis tidak tersedia. Pilih dan salin teks hasil secara manual.')}});
-document.getElementById('tahun').textContent=new Date().getFullYear();
-harga();
-</script>
-</body>
-</html>'''
+"""
+footer = """
+<footer><div class="wrap"><p><strong>Kalkulator Pintar Indonesia</strong></p>
+<a href="tentang.html">Tentang</a><a href="privasi.html">Kebijakan Privasi</a><a href="kontak.html">Kontak</a><a href="disclaimer.html">Disclaimer</a>
+<p><small>Informasi dan hasil kalkulasi disediakan untuk membantu perencanaan. Periksa kembali angka dan keputusan bisnis Anda.</small></p></div></footer>
+"""
+def page(title, description, body, path_prefix=""):
+    return f'''<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{title}</title><meta name="description" content="{description}">
+<meta name="robots" content="index,follow"><link rel="stylesheet" href="{path_prefix}style.css">
+</head><body>{header}<main>{body}</main>{footer}</body></html>'''
 
-path = Path("/mnt/data/index.html")
-path.write_text(html, encoding="utf-8")
-print(f"File berhasil dibuat: {path}")
-print(f"Ukuran: {path.stat().st_size:,} byte")
+home_body = """
+<section class="hero"><p><strong>TOOLS GRATIS UNTUK KERJA DAN USAHA</strong></p>
+<h1>Hitung lebih cepat. Rencanakan dengan lebih jelas.</h1>
+<p>Gunakan kalkulator sederhana untuk membantu menghitung harga jual, keuntungan, dan persentase. Baca panduan praktis untuk memahami hasilnya sebelum mengambil keputusan.</p>
+<a class="button" href="tools/kalkulator-untung.html">Coba Kalkulator UMKM</a></section>
+<h2>Tools pilihan</h2><section class="grid">
+<div class="card"><h3>Kalkulator Untung UMKM</h3><p>Hitung total biaya, laba, dan margin berdasarkan angka yang Anda masukkan.</p><a href="tools/kalkulator-untung.html">Buka kalkulator →</a></div>
+<div class="card"><h3>Kalkulator Persentase</h3><p>Hitung persentase dari nilai, diskon, atau perubahan antara dua angka.</p><a href="tools/kalkulator-persen.html">Buka kalkulator →</a></div>
+<div class="card"><h3>Panduan Menentukan Harga Jual</h3><p>Pelajari contoh menghitung biaya dan menentukan harga jual dengan asumsi yang jelas.</p><a href="artikel/hitung-harga-jual.html">Baca panduan →</a></div>
+</section>
+<h2>Kenapa menggunakan tools ini?</h2><p>Semua perhitungan dasar berjalan langsung di browser. Angka yang Anda masukkan tidak dikirim ke server oleh kalkulator ini. Hasil adalah alat bantu, bukan pengganti pencatatan keuangan atau nasihat profesional.</p>
+<div class="notice"><strong>Catatan:</strong> Situs ini masih tahap awal. Tambahkan contoh, penjelasan, dan artikel orisinal berdasarkan kebutuhan pengguna sebelum mengajukan monetisasi.</div>
+"""
+open(f"{base}/index.html","w",encoding="utf-8").write(page("Kalkulator Pintar Indonesia | Tools Gratis","Kumpulan kalkulator gratis untuk UMKM, persentase, dan produktivitas.",home_body))
+
+profit_body = """
+<article><h1>Kalkulator Untung UMKM</h1><p>Masukkan biaya produksi total dan jumlah produk untuk menghitung biaya per unit, harga jual, laba per unit, serta margin. Masukkan biaya yang relevan agar hasil lebih mendekati kondisi usaha Anda.</p>
+<div class="panel"><label for="cost">Total biaya (Rp)</label><input id="cost" type="number" min="0" value="500000">
+<label for="qty">Jumlah produk</label><input id="qty" type="number" min="1" value="100">
+<label for="price">Harga jual per unit (Rp)</label><input id="price" type="number" min="0" value="7000">
+<button onclick="calc()">Hitung</button><div id="result" class="result" aria-live="polite">Masukkan angka lalu tekan Hitung.</div></div>
+<h2>Cara membaca hasil</h2><ul><li>Biaya per unit = total biaya dibagi jumlah produk.</li><li>Laba per unit = harga jual dikurangi biaya per unit.</li><li>Margin laba = laba per unit dibagi harga jual, lalu dikali 100%.</li></ul>
+<p class="notice">Perhitungan ini hanya mencakup biaya yang Anda masukkan. Pertimbangkan biaya tenaga kerja, kemasan, transportasi, pajak, produk rusak, dan biaya operasional lain jika relevan.</p></article>
+<script>
+function rupiah(n){return new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(n)}
+function calc(){const c=Number(document.getElementById('cost').value),q=Number(document.getElementById('qty').value),p=Number(document.getElementById('price').value);const r=document.getElementById('result');if(c<0||q<=0||p<0||!Number.isFinite(c+q+p)){r.textContent='Periksa kembali angka yang dimasukkan.';return}const unit=c/q,profit=p-unit,margin=p?profit/p*100:0;r.innerHTML='Biaya per unit: '+rupiah(unit)+'<br>Laba per unit: '+rupiah(profit)+'<br>Estimasi laba untuk seluruh unit jika terjual: '+rupiah(profit*q)+'<br>Margin laba: '+margin.toFixed(2)+'%';}
+</script>
+"""
+open(f"{base}/tools/kalkulator-untung.html","w",encoding="utf-8").write(page("Kalkulator Untung UMKM | Kalkulator Pintar Indonesia","Kalkulator gratis untuk menghitung biaya per unit, laba, dan margin usaha kecil.","<article>"+profit_body+"</article>","../"))
+
+percent_body = """
+<article><h1>Kalkulator Persentase</h1><p>Gunakan kalkulator ini untuk menghitung persentase dari suatu nilai, misalnya diskon atau perubahan angka.</p>
+<div class="panel"><label for="mode">Jenis perhitungan</label><select id="mode"><option value="of">Berapa persen dari nilai?</option><option value="discount">Harga setelah diskon</option><option value="change">Persentase perubahan dari nilai awal ke nilai akhir</option></select>
+<label for="a">Nilai / harga awal</label><input id="a" type="number" value="200000">
+<label for="b">Persentase (%) atau nilai akhir</label><input id="b" type="number" value="15">
+<button onclick="calcP()">Hitung</button><div id="result" class="result" aria-live="polite">Masukkan angka lalu tekan Hitung.</div></div>
+<h2>Rumus dasar</h2><ul><li>Persentase dari nilai = nilai × persentase ÷ 100.</li><li>Harga setelah diskon = harga awal − nilai diskon.</li><li>Perubahan persentase = (nilai akhir − nilai awal) ÷ nilai awal × 100%.</li></ul></article>
+<script>
+function fmt(n){return new Intl.NumberFormat('id-ID',{maximumFractionDigits:2}).format(n)}
+function calcP(){let m=document.getElementById('mode').value,a=Number(document.getElementById('a').value),b=Number(document.getElementById('b').value),s='';if(!Number.isFinite(a+b)){s='Periksa angka yang dimasukkan.'}else if(m==='of'){s=b+'% dari '+fmt(a)+' = '+fmt(a*b/100)}else if(m==='discount'){if(a<0||b<0||b>100)s='Masukkan harga nonnegatif dan diskon antara 0–100%.';else s='Nilai diskon: Rp '+fmt(a*b/100)+'; harga setelah diskon: Rp '+fmt(a-a*b/100)}else{if(a===0)s='Nilai awal tidak boleh nol.';else s='Perubahan: '+fmt(((b-a)/a)*100)+'%'}document.getElementById('result').textContent=s}
+</script>
+"""
+open(f"{base}/tools/kalkulator-persen.html","w",encoding="utf-8").write(page("Kalkulator Persentase dan Diskon Gratis","Hitung persentase, diskon, harga setelah diskon, dan perubahan nilai.","<article>"+percent_body+"</article>","../"))
+
+article_body = """
+<article><h1>Cara Menghitung Harga Jual Produk UMKM dengan Sederhana</h1>
+<p>Menentukan harga jual sebaiknya dimulai dari pencatatan biaya. Harga yang terlihat menarik belum tentu menghasilkan keuntungan jika biaya bahan, kemasan, tenaga kerja, dan operasional tidak dihitung.</p>
+<h2>1. Catat biaya yang benar-benar dikeluarkan</h2><p>Contoh sederhana: biaya bahan Rp300.000, kemasan Rp50.000, transportasi Rp25.000, dan biaya lain Rp25.000. Total biaya contoh ini adalah Rp400.000. Angka ini hanya ilustrasi, bukan patokan untuk semua jenis usaha.</p>
+<h2>2. Hitung biaya per unit</h2><p>Jika total biaya Rp400.000 menghasilkan 80 unit, biaya rata-rata per unit adalah Rp400.000 ÷ 80 = Rp5.000. Pastikan jumlah unit yang digunakan adalah produk yang layak dijual.</p>
+<h2>3. Tentukan harga jual dengan asumsi yang jelas</h2><p>Jika harga jual ditetapkan Rp7.000 per unit dan semua 80 unit terjual, pendapatan kotor adalah Rp560.000. Selisih terhadap biaya Rp400.000 adalah Rp160.000 sebelum biaya lain yang belum tercatat, pajak, atau produk tidak terjual.</p>
+<h2>4. Bedakan markup dan margin</h2><p>Markup membandingkan laba terhadap biaya. Margin membandingkan laba terhadap harga jual. Dengan biaya Rp5.000 dan harga jual Rp7.000, markup adalah 40%, sedangkan margin adalah sekitar 28,57%.</p>
+<h2>5. Gunakan kalkulator sebagai alat bantu</h2><p>Masukkan biaya total, jumlah produk, dan harga jual ke <a href="../tools/kalkulator-untung.html">Kalkulator Untung UMKM</a>. Coba beberapa skenario harga dan catat asumsi yang digunakan.</p>
+<h2>Checklist sebelum menetapkan harga</h2><ul><li>Apakah biaya bahan dan kemasan sudah masuk?</li><li>Apakah biaya tenaga kerja dan transportasi sudah diperhitungkan?</li><li>Apakah ada biaya sewa, listrik, atau biaya platform?</li><li>Apakah harga masih masuk akal dibandingkan nilai produk dan pasar?</li><li>Apakah pencatatan diperbarui ketika biaya berubah?</li></ul>
+<p><em>Artikel ini adalah panduan umum. Sesuaikan perhitungan dengan kondisi usaha dan periksa kembali angka sebelum mengambil keputusan.</em></p></article>
+"""
+open(f"{base}/artikel/hitung-harga-jual.html","w",encoding="utf-8").write(page("Cara Menghitung Harga Jual Produk UMKM","Panduan menghitung biaya per unit, laba, markup, dan margin untuk membantu UMKM merencanakan harga jual.","<article>"+article_body+"</article>","../"))
+
+for filename,title,desc,body in [
+("tentang.html","Tentang Kalkulator Pintar Indonesia","Tentang website Kalkulator Pintar Indonesia.","<h1>Tentang Kami</h1><p>Kalkulator Pintar Indonesia adalah proyek informasi yang menyediakan kalkulator sederhana dan panduan praktis untuk produktivitas serta perencanaan usaha. Kami berupaya menjelaskan cara kerja perhitungan dan asumsi yang digunakan agar pengguna dapat memeriksa hasilnya.</p><p>Konten perlu ditinjau secara berkala. Jika menemukan kesalahan, silakan hubungi pengelola melalui halaman Kontak.</p>"),
+("privasi.html","Kebijakan Privasi | Kalkulator Pintar Indonesia","Kebijakan privasi website Kalkulator Pintar Indonesia.","<h1>Kebijakan Privasi</h1><p>Kalkulator pada versi ini memproses angka yang dimasukkan langsung di browser dan tidak mengirimkannya ke server melalui kode kalkulator. Namun, layanan hosting dapat mencatat informasi teknis kunjungan sesuai kebijakannya.</p><p>Jika situs ini kelak memakai Google AdSense, Google Analytics, formulir, atau layanan pihak ketiga lainnya, kebijakan ini harus diperbarui untuk menjelaskan teknologi, cookie, data yang dikumpulkan, tujuan pemrosesan, dan pilihan pengguna yang berlaku.</p><p>Jangan memasukkan informasi pribadi atau rahasia ke dalam tools.</p>"),
+("kontak.html","Kontak | Kalkulator Pintar Indonesia","Informasi kontak Kalkulator Pintar Indonesia.","<h1>Kontak</h1><p>Untuk saran atau laporan kesalahan, tambahkan alamat email pengelola yang aktif sebelum situs dipublikasikan. Jangan menggunakan alamat email palsu.</p><p>Email pengelola: <strong>[GANTI DENGAN EMAIL AKTIF]</strong></p>"),
+("disclaimer.html","Disclaimer | Kalkulator Pintar Indonesia","Batasan penggunaan tools dan informasi pada website ini.","<h1>Disclaimer</h1><p>Tools dan artikel disediakan untuk tujuan informasi dan perencanaan umum. Hasil kalkulasi bergantung pada data yang dimasukkan pengguna dan tidak menjamin hasil usaha tertentu. Periksa rumus, asumsi, serta kewajiban yang berlaku sebelum mengambil keputusan keuangan atau bisnis.</p><p>Konten di situs ini bukan nasihat akuntansi, hukum, atau pajak profesional.</p>")
+]:
+    open(f"{base}/{filename}","w",encoding="utf-8").write(page(title,desc,body))
+
+open(f"{base}/style.css","w",encoding="utf-8").write(style)
+open(f"{base}/robots.txt","w",encoding="utf-8").write("User-agent: *\nAllow: /\n# Ganti sitemap di bawah dengan URL setelah website dipublikasikan\n")
+open(f"{base}/README.txt","w",encoding="utf-8").write("""KALKULATOR PINTAR INDONESIA — PAKET AWAL GITHUB PAGES
+
+1. Ekstrak ZIP.
+2. Buat repository PUBLIC di GitHub bernama NAMAUSER.github.io (ganti NAMAUSER dengan username GitHub Anda).
+3. Upload semua file dan folder hasil ekstrak ke root repository, bukan mengupload file ZIP saja.
+4. Buka Settings > Pages. Pilih Deploy from a branch, branch main, folder /(root), lalu Save.
+5. Tunggu proses selesai. URL umumnya https://NAMAUSER.github.io
+6. Uji semua tautan, kalkulator, tampilan HP, dan ejaan.
+7. Ganti placeholder email di kontak.html dengan email aktif. Tambahkan alamat situs ke sitemap.xml setelah URL final diketahui.
+8. Tambahkan artikel orisinal dan halaman yang benar-benar bermanfaat. Jangan mengajukan AdSense hanya berdasarkan paket awal ini.
+9. Jangan menambahkan kode iklan sebelum situs dan akun disetujui. Ikuti petunjuk AdSense saat pengajuan.
+
+PENTING:
+- GitHub Pages adalah hosting statis. Tidak ada database/server-side backend.
+- Kebijakan GitHub Pages menyatakan layanan ini tidak ditujukan untuk menjalankan online business atau SaaS komersial. Website beriklan dapat berisiko dianggap penggunaan komersial; baca kebijakan terkini sebelum mengandalkan Pages untuk bisnis AdSense. Untuk situs yang tujuan utamanya monetisasi, pertimbangkan Blogger sebagai alternatif gratis yang lebih sesuai.
+- Paket ini adalah prototipe awal, bukan jaminan lolos AdSense atau mendapatkan trafik.
+- Semua angka pada contoh artikel adalah ilustrasi.
+""")
+
+zip_path="/mnt/data/kalkulator-pintar-indonesia-github-pages.zip"
+with zipfile.ZipFile(zip_path,"w",zipfile.ZIP_DEFLATED) as z:
+    for root, dirs, files in os.walk(base):
+        for f in files:
+            p=os.path.join(root,f)
+            z.write(p, os.path.relpath(p, base))
+print(zip_path)
