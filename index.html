@@ -1,0 +1,106 @@
+from pathlib import Path
+
+html = r'''<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Tools produktivitas gratis: penghitung kata, pengolah teks, kalkulator diskon, timer fokus Pomodoro, dan kalkulator tanggal.">
+<meta name="theme-color" content="#0b2a54">
+<title>ProduktifTools — Tools Produktivitas Gratis</title>
+<style>
+:root{--navy:#0b2a54;--yellow:#ffd530;--pale:#e7f0fa;--ink:#17243b;--muted:#68758a;--line:#dce4ef;--white:#fff;--bg:#f6f8fc}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55}
+header{background:var(--navy);color:white;padding:18px 20px;border-bottom:5px solid var(--yellow)}.nav{max-width:1100px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}.brand{font-weight:850;font-size:1.25rem;letter-spacing:-.4px}.brand span{color:var(--yellow)}nav{display:flex;gap:16px;flex-wrap:wrap}nav a{color:white;text-decoration:none;font-size:.92rem}nav a:hover{text-decoration:underline}
+.hero{background:linear-gradient(135deg,var(--navy),#164a83);color:white;padding:54px 20px 48px}.hero-inner{max-width:1100px;margin:auto}.eyebrow{display:inline-block;color:var(--navy);background:var(--yellow);font-weight:800;border-radius:999px;padding:5px 12px;font-size:.8rem}.hero h1{font-size:clamp(2rem,5vw,3.35rem);line-height:1.1;max-width:760px;margin:18px 0 14px;letter-spacing:-1.3px}.hero p{color:#e5edf8;max-width:650px;margin:0 0 24px}.search{width:min(100%,540px);display:flex;gap:8px}.search input{flex:1;min-width:0;padding:13px 15px;border-radius:12px;border:1px solid #dce4ef;font:inherit}.search button{border:0;border-radius:12px;background:var(--yellow);color:var(--navy);font-weight:800;padding:0 18px;cursor:pointer}
+main{max-width:1100px;margin:0 auto;padding:32px 20px 54px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}.section-head h2{margin:0;font-size:1.55rem}.section-head p{margin:4px 0 0;color:var(--muted);font-size:.93rem}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.tool{background:white;border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 4px 18px #0b2a5408;scroll-margin-top:20px}.tool-top{display:flex;gap:12px;align-items:center;margin-bottom:15px}.tool-icon{width:44px;height:44px;display:grid;place-items:center;background:var(--pale);border-radius:12px;font-size:1.35rem}.tool h3{margin:0;font-size:1.12rem}.tool .desc{margin:3px 0 0;color:var(--muted);font-size:.88rem}.field{display:block;margin:12px 0 6px;font-size:.9rem;font-weight:700}textarea,input[type=text],input[type=number],input[type=date],select{width:100%;padding:11px 12px;border:1px solid #cbd6e5;border-radius:10px;background:white;color:var(--ink);font:inherit}textarea{min-height:125px;resize:vertical}.row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.btn{border:0;border-radius:10px;padding:10px 14px;background:var(--navy);color:white;font:inherit;font-weight:750;cursor:pointer}.btn:hover{filter:brightness(1.15)}.btn.secondary{background:var(--pale);color:var(--navy)}.btn.yellow{background:var(--yellow);color:var(--navy)}.stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.stat{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:7px 10px;font-size:.85rem}.result{margin-top:12px;padding:12px;background:#f0f6ff;border:1px solid #d7e6fb;border-radius:10px;min-height:42px;overflow-wrap:anywhere}.timer{text-align:center;padding:10px 0}.time{font-size:clamp(2.7rem,8vw,4rem);font-weight:850;letter-spacing:2px;color:var(--navy);font-variant-numeric:tabular-nums}.small{font-size:.85rem;color:var(--muted)}.notice{margin-top:24px;background:#fff8d8;border:1px solid #f3df81;padding:15px 17px;border-radius:12px;font-size:.9rem}.content{margin-top:38px;background:white;border:1px solid var(--line);border-radius:16px;padding:22px}.content h2{font-size:1.3rem}.content p{color:#4f5d72}footer{background:#071f40;color:#d8e4f4;padding:26px 20px;text-align:center;font-size:.9rem}footer a{color:var(--yellow)}.hidden{display:none!important}
+@media(max-width:680px){.grid{grid-template-columns:1fr}.hero{padding:40px 18px}.search{flex-direction:column}.search button{padding:12px}.row{grid-template-columns:1fr}nav{gap:10px}.tool{padding:18px}main{padding:25px 14px 40px}}
+</style>
+</head>
+<body>
+<header><div class="nav"><div class="brand">Produktif<span>Tools</span></div><nav aria-label="Navigasi utama"><a href="#tools">Semua Tools</a><a href="#tentang">Tentang</a></nav></div></header>
+<section class="hero"><div class="hero-inner"><span class="eyebrow">GRATIS • PRAKTIS • LANGSUNG DI BROWSER</span><h1>Kerja lebih cerdas, mulai dari sini.</h1><p>Kumpulan tools sederhana untuk membantu pekerjaan, belajar, dan aktivitas harian. Tanpa instalasi dan tanpa perlu membuat akun.</p><form class="search" id="searchForm"><input id="searchInput" type="text" placeholder="Cari tools, misalnya: kata atau timer" aria-label="Cari tools"><button type="submit">Cari Tools</button></form></div></section>
+<main>
+<div class="section-head" id="tools"><div><h2>Tools Produktivitas</h2><p>Pilih alat yang kamu butuhkan. Hasil diproses langsung di perangkatmu.</p></div><span class="small" id="toolCount">4 tools tersedia</span></div>
+<div class="grid" id="toolGrid">
+<section class="tool" data-search="teks text kata karakter huruf kapital lowercase uppercase spasi">
+<div class="tool-top"><div class="tool-icon">📝</div><div><h3>Pengolah Teks</h3><p class="desc">Hitung kata, karakter, dan rapikan tulisan.</p></div></div>
+<label class="field" for="textInput">Masukkan teks</label><textarea id="textInput" placeholder="Ketik atau tempel teks di sini..."></textarea>
+<div class="stats"><span class="stat">Kata: <b id="wordCount">0</b></span><span class="stat">Karakter: <b id="charCount">0</b></span><span class="stat">Tanpa spasi: <b id="noSpaceCount">0</b></span></div>
+<div class="btns"><button class="btn" id="upperBtn">HURUF BESAR</button><button class="btn secondary" id="lowerBtn">huruf kecil</button><button class="btn secondary" id="cleanBtn">Rapikan spasi</button><button class="btn yellow" id="copyTextBtn">Salin teks</button><button class="btn secondary" id="clearTextBtn">Hapus</button></div><p class="small" id="textStatus" aria-live="polite"></p>
+</section>
+<section class="tool" data-search="kalkulator hitung matematika tambah kurang kali bagi">
+<div class="tool-top"><div class="tool-icon">🧮</div><div><h3>Kalkulator Dasar</h3><p class="desc">Hitung operasi matematika dasar.</p></div></div>
+<label class="field" for="calcA">Angka pertama</label><input id="calcA" type="number" step="any" placeholder="Contoh: 125">
+<label class="field" for="calcOp">Operasi</label><select id="calcOp"><option value="+">Penjumlahan (+)</option><option value="-">Pengurangan (−)</option><option value="*">Perkalian (×)</option><option value="/">Pembagian (÷)</option></select>
+<label class="field" for="calcB">Angka kedua</label><input id="calcB" type="number" step="any" placeholder="Contoh: 25">
+<div class="btns"><button class="btn" id="calcBtn">Hitung</button><button class="btn secondary" id="calcClear">Reset</button></div><div class="result" id="calcResult" aria-live="polite">Hasil akan muncul di sini.</div>
+</section>
+<section class="tool" data-search="diskon persen harga potongan belanja hemat">
+<div class="tool-top"><div class="tool-icon">🏷️</div><div><h3>Kalkulator Diskon</h3><p class="desc">Hitung potongan harga dan harga akhir.</p></div></div>
+<label class="field" for="priceInput">Harga awal (Rp)</label><input id="priceInput" type="number" min="0" step="any" placeholder="Contoh: 150000">
+<label class="field" for="discountInput">Diskon (%)</label><input id="discountInput" type="number" min="0" max="100" step="any" placeholder="Contoh: 20">
+<div class="btns"><button class="btn" id="discountBtn">Hitung diskon</button><button class="btn secondary" id="discountClear">Reset</button></div><div class="result" id="discountResult" aria-live="polite">Harga akhir akan muncul di sini.</div>
+</section>
+<section class="tool" data-search="pomodoro timer fokus waktu belajar kerja istirahat">
+<div class="tool-top"><div class="tool-icon">⏱️</div><div><h3>Timer Fokus</h3><p class="desc">Gunakan sesi fokus dan istirahat singkat.</p></div></div>
+<div class="timer"><div class="time" id="timerDisplay">25:00</div><div id="timerLabel">Waktu fokus</div><p class="small">Tetap buka halaman ini saat timer berjalan.</p></div>
+<div class="row"><div><label class="field" for="focusMinutes">Fokus (menit)</label><input id="focusMinutes" type="number" min="1" max="180" value="25"></div><div><label class="field" for="breakMinutes">Istirahat (menit)</label><input id="breakMinutes" type="number" min="1" max="60" value="5"></div></div>
+<div class="btns"><button class="btn" id="timerStart">Mulai</button><button class="btn secondary" id="timerPause">Jeda</button><button class="btn yellow" id="timerReset">Reset</button><button class="btn secondary" id="timerSwitch">Ganti sesi</button></div><p class="small" id="timerStatus" aria-live="polite"></p>
+</section>
+<section class="tool" data-search="tanggal date calculator selisih hari kalender durasi">
+<div class="tool-top"><div class="tool-icon">📅</div><div><h3>Kalkulator Tanggal</h3><p class="desc">Ketahui selisih hari di antara dua tanggal.</p></div></div>
+<div class="row"><div><label class="field" for="dateStart">Tanggal mulai</label><input type="date" id="dateStart"></div><div><label class="field" for="dateEnd">Tanggal akhir</label><input type="date" id="dateEnd"></div></div>
+<div class="btns"><button class="btn" id="dateCalcBtn">Hitung selisih</button><button class="btn secondary" id="dateTodayBtn">Isi hari ini</button></div><div class="result" id="dateResult" aria-live="polite">Selisih tanggal akan muncul di sini.</div>
+</section>
+<section class="tool" data-search="persentase persen kenaikan penurunan rasio">
+<div class="tool-top"><div class="tool-icon">📊</div><div><h3>Kalkulator Persentase</h3><p class="desc">Hitung persentase dari suatu nilai.</p></div></div>
+<label class="field" for="percentInput">Persentase (%)</label><input id="percentInput" type="number" step="any" placeholder="Contoh: 15">
+<label class="field" for="percentBase">Dari nilai</label><input id="percentBase" type="number" step="any" placeholder="Contoh: 200000">
+<div class="btns"><button class="btn" id="percentBtn">Hitung</button><button class="btn secondary" id="percentClear">Reset</button></div><div class="result" id="percentResult" aria-live="polite">Hasil akan muncul di sini.</div>
+</section>
+</div>
+<div class="notice"><b>Privasi:</b> tools di halaman ini dirancang memproses input langsung di browser. Jangan memasukkan informasi rahasia pada perangkat bersama. Timer memerlukan halaman tetap terbuka agar hitung mundur berjalan.</div>
+<section class="content" id="tentang"><h2>Tentang ProduktifTools</h2><p>ProduktifTools adalah kumpulan alat bantu digital sederhana untuk pekerjaan sehari-hari. Gunakan pengolah teks untuk merapikan tulisan, kalkulator untuk membantu perhitungan, timer untuk mengatur waktu fokus, dan kalkulator tanggal untuk menghitung durasi.</p><p>Website ini menyediakan alat dasar gratis dan bukan pengganti pemeriksaan profesional untuk perhitungan yang berisiko tinggi. Hasil perhitungan sebaiknya diperiksa kembali sesuai kebutuhan.</p><h2>Kontak dan kebijakan</h2><p>Tambahkan alamat kontak yang valid, halaman kebijakan privasi, dan informasi pengelola sebelum mengajukan monetisasi iklan. Jangan menampilkan klaim bahwa website menggunakan AI generatif jika fitur tersebut belum tersedia.</p></section>
+</main>
+<footer>© <span id="year"></span> ProduktifTools · Tools produktivitas gratis</footer>
+<script>
+const $=id=>document.getElementById(id);
+$('year').textContent=new Date().getFullYear();
+const textInput=$('textInput');
+function updateTextStats(){const v=textInput.value;$('wordCount').textContent=v.trim()?v.trim().split(/\s+/).length:0;$('charCount').textContent=v.length;$('noSpaceCount').textContent=v.replace(/\s/g,'').length}
+textInput.addEventListener('input',updateTextStats);
+$('upperBtn').addEventListener('click',()=>{textInput.value=textInput.value.toLocaleUpperCase('id-ID');updateTextStats()});
+$('lowerBtn').addEventListener('click',()=>{textInput.value=textInput.value.toLocaleLowerCase('id-ID');updateTextStats()});
+$('cleanBtn').addEventListener('click',()=>{textInput.value=textInput.value.replace(/[ \t]+/g,' ').replace(/\s*\n\s*/g,'\n').trim();updateTextStats()});
+$('clearTextBtn').addEventListener('click',()=>{textInput.value='';updateTextStats();$('textStatus').textContent='Teks dihapus.'});
+$('copyTextBtn').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(textInput.value);$('textStatus').textContent='Teks berhasil disalin.'}catch(e){textInput.select();$('textStatus').textContent='Pilih teks lalu salin dengan Ctrl+C.'}});
+$('calcBtn').addEventListener('click',()=>{const a=Number($('calcA').value),b=Number($('calcB').value),op=$('calcOp').value;if($('calcA').value===''||$('calcB').value==='')return $('calcResult').textContent='Masukkan kedua angka terlebih dahulu.';if(op==='/'&&b===0)return $('calcResult').textContent='Tidak dapat membagi dengan nol.';const r=op==='+'?a+b:op==='-'?a-b:op==='*'?a*b:a/b;$('calcResult').textContent='Hasil: '+new Intl.NumberFormat('id-ID',{maximumFractionDigits:10}).format(r)});
+$('calcClear').addEventListener('click',()=>{$('calcA').value='';$('calcB').value='';$('calcResult').textContent='Hasil akan muncul di sini.'});
+const rupiah=n=>new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(n);
+$('discountBtn').addEventListener('click',()=>{const p=Number($('priceInput').value),d=Number($('discountInput').value);if($('priceInput').value===''||$('discountInput').value==='')return $('discountResult').textContent='Masukkan harga dan persentase diskon.';if(p<0||d<0||d>100)return $('discountResult').textContent='Harga harus ≥ 0 dan diskon 0–100%.';const cut=p*d/100;$('discountResult').textContent=`Potongan: ${rupiah(cut)} · Harga akhir: ${rupiah(p-cut)}`});
+$('discountClear').addEventListener('click',()=>{$('priceInput').value='';$('discountInput').value='';$('discountResult').textContent='Harga akhir akan muncul di sini.'});
+$('percentBtn').addEventListener('click',()=>{const p=Number($('percentInput').value),b=Number($('percentBase').value);if($('percentInput').value===''||$('percentBase').value==='')return $('percentResult').textContent='Masukkan persentase dan nilai dasar.';$('percentResult').textContent=`${p}% dari ${new Intl.NumberFormat('id-ID').format(b)} = ${new Intl.NumberFormat('id-ID',{maximumFractionDigits:8}).format(p/100*b)}`});
+$('percentClear').addEventListener('click',()=>{$('percentInput').value='';$('percentBase').value='';$('percentResult').textContent='Hasil akan muncul di sini.'});
+let remaining=1500,interval=null,isBreak=false;
+function renderTimer(){$('timerDisplay').textContent=String(Math.floor(remaining/60)).padStart(2,'0')+':'+String(remaining%60).padStart(2,'0');$('timerLabel').textContent=isBreak?'Waktu istirahat':'Waktu fokus'}
+function readMinutes(id,min,max){const n=Number($(id).value);return Number.isFinite(n)&&n>=min&&n<=max?n:null}
+function stopTimer(){if(interval!==null){clearInterval(interval);interval=null}}
+$('timerStart').addEventListener('click',()=>{if(interval!==null)return;interval=setInterval(()=>{remaining--;renderTimer();if(remaining<=0){stopTimer();$('timerStatus').textContent=isBreak?'Sesi istirahat selesai.':'Sesi fokus selesai. Saatnya jeda!';if(typeof alert==='function')alert($('timerStatus').textContent)}},1000);$('timerStatus').textContent='Timer berjalan.'});
+$('timerPause').addEventListener('click',()=>{stopTimer();$('timerStatus').textContent='Timer dijeda.'});
+$('timerReset').addEventListener('click',()=>{stopTimer();isBreak=false;remaining=(readMinutes('focusMinutes',1,180)||25)*60;renderTimer();$('timerStatus').textContent='Timer direset.'});
+$('timerSwitch').addEventListener('click',()=>{stopTimer();isBreak=!isBreak;remaining=(readMinutes(isBreak?'breakMinutes':'focusMinutes',1,isBreak?60:180)||(isBreak?5:25))*60;renderTimer();$('timerStatus').textContent='Sesi diganti.'});
+$('focusMinutes').addEventListener('change',()=>{if(!isBreak&&interval===null){remaining=(readMinutes('focusMinutes',1,180)||25)*60;renderTimer()}});
+$('breakMinutes').addEventListener('change',()=>{if(isBreak&&interval===null){remaining=(readMinutes('breakMinutes',1,60)||5)*60;renderTimer()}});
+renderTimer();
+const isoLocal=d=>{const x=new Date(d.getTime()-d.getTimezoneOffset()*60000);return x.toISOString().slice(0,10)};
+$('dateStart').value=isoLocal(new Date());$('dateEnd').value=isoLocal(new Date());
+$('dateCalcBtn').addEventListener('click',()=>{const a=$('dateStart').value,b=$('dateEnd').value;if(!a||!b)return $('dateResult').textContent='Pilih kedua tanggal.';const days=Math.round((Date.parse(b+'T00:00:00Z')-Date.parse(a+'T00:00:00Z'))/86400000);$('dateResult').textContent=`Selisih: ${Math.abs(days)} hari${days<0?' (tanggal akhir lebih awal)':''}. Jika kedua tanggal dihitung termasuk, totalnya ${Math.abs(days)+1} hari.`});
+$('dateTodayBtn').addEventListener('click',()=>{$('dateStart').value=isoLocal(new Date());$('dateEnd').value=isoLocal(new Date());$('dateResult').textContent='Tanggal diisi dengan hari ini.'});
+$('searchForm').addEventListener('submit',e=>{e.preventDefault();const q=$('searchInput').value.trim().toLocaleLowerCase('id-ID');let visible=0;document.querySelectorAll('.tool').forEach(card=>{const match=!q||(card.dataset.search+' '+card.innerText).toLocaleLowerCase('id-ID').includes(q);card.classList.toggle('hidden',!match);if(match)visible++});$('toolCount').textContent=visible+' tools ditampilkan';$('tools').scrollIntoView({behavior:'smooth'})});
+</script>
+</body>
+</html>'''
+path = Path("/mnt/data/index.html")
+path.write_text(html, encoding="utf-8")
+print(f"File siap: {path} ({path.stat().st_size:,} bytes)")
